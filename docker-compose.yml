@@ -1,0 +1,38 @@
+version: "3"
+services:
+    frontend:
+        container_name: airbnb
+        build:
+            context: ./SlackFrontedn
+            dockerfile: Dockerfile
+        image: vicky/airbnb
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./SlackFrontedn:/usr/src/app
+    backend:
+        links: 
+        - postgres
+        depends_on: 
+        - postgres
+        container_name: vicky_server
+        environment:
+            - NODE_ENV=production
+        build:
+            context: ./backseql
+            dockerfile: Dockerfile
+        image: vicky/vicky_server
+        ports:
+            - "8081:8081"
+        volumes:
+            - ./backseql:/usr/src/app
+    postgres:
+        image: postgres:10.3
+        restart: always
+        environment:
+          POSTGRES_USER: sujith
+          POSTGRES_PASSWORD: v
+        volumes:
+          - ./datapg:/var/lib/postgresql/data
+        ports: 
+          - '7890:5432'
